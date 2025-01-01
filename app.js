@@ -1,9 +1,11 @@
 // server/app.js
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const connectDB = require('./DB-connection');
-const contactRoutes = require('./routes/contatctRoutes');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const connectDB = require("./DB-connection");
+require("dotenv").config();
+
+const contactRoutes = require("./routes/contatctRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,5 +23,5 @@ app.use(bodyParser.json());
 app.use(contactRoutes);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
