@@ -1,6 +1,6 @@
 const express = require("express");
 const Contact = require("../models/Contact");
-const nodemailer = require("nodemailer");
+const { sendEmail } = require("../utils/emailService"); // Import sendEmail function
 const router = express.Router();
 
 router.post("/api/contact", async (req, res) => {
@@ -15,40 +15,18 @@ router.post("/api/contact", async (req, res) => {
   try {
     // Save the data to the database
     await newContact.save();
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER, // Sender's email address
-        pass: process.env.EMAIL_PASS, // Sender's email password or app password
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.EMAIL_USER, // Sender's email address
-      to: process.env.EMAIL_RECEIVER, // Receiver's email address
-      subject: "New Contact Form Submission",
-      text: `
-        You have received a new message from your contact form:
-
-        Name: ${name}
-        Email: ${email}
-        Mobile: ${mobile}
-        Message: ${msg}
-
-        -- This message was sent via your portfolio contact form.
-      `,
-    };
+    console.log("Contact saved successfully");
 
     // Send the email
-    await transporter.sendMail(mailOptions);
+    await sendEmail({ name, email, mobile, msg });
+    console.log("Email sent successfully");
 
-    res
-      .status(201)
-      .json({ message: "Contact form submitted successfully and email sent!" });
+    res.status(201).json({
+      message: "Contact form submitted successfully and email sent!",
+    });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error saving contact or sending email:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
 

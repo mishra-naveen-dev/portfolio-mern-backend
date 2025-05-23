@@ -1,4 +1,3 @@
-// server/db-connection.js
 const mongoose = require("mongoose");
 require("dotenv").config();
 

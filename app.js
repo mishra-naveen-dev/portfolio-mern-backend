@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectDB = require("./DB-connection");
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const contactRoutes = require("./routes/contatctRoutes");
